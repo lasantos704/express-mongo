@@ -1,4 +1,5 @@
-import { autor, autorSchema } from "../models/Autor.js";
+import mongoose from "mongoose";
+import { autor } from "../models/Autor.js";
 
 class AutorController {
   constructor(app) {}
@@ -18,11 +19,20 @@ class AutorController {
     try {
       const id = req.params.id;
       const autorEncontrado = await autor.findById(id);
-      res.status(200).json(autorEncontrado);
+
+      if (autorEncontrado !== null) {
+        res.status(200).json(autorEncontrado);
+      } else {
+        res.status(404).json({ message: "Autor não encontrado" });
+      }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: `${error.message} - Falha ao buscar autor` });
+      if (error instanceof mongoose.Error.CastError) {
+        res.status(400).json({ message: "ID inválido" });
+      } else {
+        res
+          .status(500)
+          .send({ message: `Falha do servidor - ${error.message}` });
+      }
     }
   }
 
@@ -59,7 +69,7 @@ class AutorController {
     } catch (error) {
       res
         .status(500)
-        .json({ message: `${error.message} - Falha na exclusão do autor` });
+        .json({ message: `Falha no servidor` });
     }
   }
 }
