@@ -1,5 +1,5 @@
 import NotFound from "../errors/NotFound.js";
-import { autores } from "../models/Autor.js";
+import { autores } from "../models/index.js";
 
 class AutorController {
   constructor(app) {}

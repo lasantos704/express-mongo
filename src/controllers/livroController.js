@@ -1,5 +1,5 @@
 import NotFound from "../errors/NotFound.js";
-import livros from "../models/Livro.js";
+import { livros } from "../models/index.js";
 
 class LivroController {
   constructor(app) {}
