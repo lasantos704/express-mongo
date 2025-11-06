@@ -3,6 +3,7 @@ import connectDatabase from "./config/dbConnect.js";
 import routes from "./routes/index.js";
 import manipuladorDeErros from "./middlewares/manipuladorDeErros.js";
 import manipulador404 from "./middlewares/manipulador404.js";
+import paginar from "./middlewares/paginar.js";
 
 const conexao = await connectDatabase();
 

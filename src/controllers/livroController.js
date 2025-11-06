@@ -6,9 +6,11 @@ class LivroController {
 
   static async listarLivros(req, res, next) {
     try {
-      // using referencing
-      const listaLivros = await livros.find().populate("autor").exec();
-      res.status(200).json(listaLivros);
+      const buscasLivros = livros.find();
+
+      req.resultado = buscasLivros;
+
+      next();
     } catch (error) {
       next(error);
     }
@@ -17,10 +19,7 @@ class LivroController {
   static async listarLivroPorId(req, res, next) {
     try {
       const id = req.params.id;
-      const livroEncontrado = await livros
-        .findById(id)
-        .populate("autor", "nome")
-        .exec();
+      const livroEncontrado = await livros.findById(id);
       if (livroEncontrado === null) {
         next(new NotFound("Id do Livro não encontrado"));
       } else {
@@ -80,8 +79,9 @@ class LivroController {
       const busca = await processaBusca(req.query);
 
       if (busca !== null) {
-        const livrosResultado = await livros.find(busca).populate("autor");
-        res.status(200).json(livrosResultado);
+        const livrosResultado = await livros.find(busca);
+        req.resultado = livrosResultado;
+        next();
       } else {
         res.status(200).send([]);
       }
